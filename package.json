@@ -7,7 +7,8 @@
     "auto-unrar": "bin/auto-unrar.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "jsdoc2md auto-unrar.js"
   },
   "keywords": [
     "unrar",
@@ -20,5 +21,8 @@
     "command-line-args": "^2.1.4",
     "glob": "^6.0.4",
     "standalone-unrar": "^1.0.1"
+  },
+  "devDependencies": {
+    "jsdoc-to-markdown": "^1.3.3"
   }
 }

@@ -3,10 +3,50 @@ var glob = require('glob');
 var path = require('path');
 var fs = require('fs');
 
-module.exports = function (cwd, cb) {
+/**
+ * Unrar all files recursively if they don't exits given by
+ * a entry point root directory.
+ *
+ * @example
+ * ```js
+ * autoUnrar('~/Documents/myDirectory', function (err, data) {
+ *   // data is an object with archives as keys and entries on data.
+ *   // example:
+ *   // {
+ *   //   'some-file.rar': {
+ *   //     skip: false,
+ *   //     outputFile: 'some/path/some-file.dat',
+ *   //     entry: 'some-file'
+ *   //   }
+ *   // }
+ * });
+ * ```
+ *
+ * @example
+ * CLI Usage
+ * ```
+ * auto-unrar
+ *
+ *   Automatic unpack all recursive rar-files from a directory.
+ *
+ * Options
+ *
+ *   -h, --help              Display this usage info
+ *   -v, --verbose           Log all information
+ *   --cwd string            What folder to use as base directory (root search directory)
+ *   -i, --interval number   Set interval in minutes for periodic check. Default value is 5 minutes.
+ *
+ *   Full help (project repo): https://github.com/mikaelbr/auto-unrar
+ * ```
+ * @param {String} cwd - Path to search for rar-files
+ * @param {Function(err, data)} callback - Callback after all data has been unpacked
+ **/
+function autoUnrar (cwd, cb) {
   var opts = { cwd: cwd || process.cwd() };
   return unpackAll(opts, cb);
-};
+}
+
+module.exports = autoUnrar;
 
 function unpackAll (opts, cb) {
   glob('./**/*.rar', opts, function (err, entries) {
