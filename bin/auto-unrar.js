@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var autoUnrar = require('../');
-
 var commandLineArgs = require('command-line-args');
 
 var cli = commandLineArgs([
@@ -10,9 +9,6 @@ var cli = commandLineArgs([
   { name: 'cwd', type: String, defaultOption: true,
     defaultValue: process.cwd(),
     description: 'What folder to use as base directory (root search directory)' },
-  // { name: 'no-listen', alias: 'n', type: Boolean,
-  //   description: 'Deactivate watching on file system.'
-  // },
   { name: 'interval', alias: 'i', type: Number, defaultValue: 5,
     description: 'Set interval in minutes for periodic check. Default value is 5 minutes.' }
 ]);
@@ -30,44 +26,17 @@ if (options.help) {
   process.exit(0);
 }
 
-// if (options.periodic === null) {
-//   options.periodic = defaultPeriodicMinutes;
-// }
-
+console.log('Started polling folder `' +
+  options.cwd + '` every ' +
+  options.interval + ' minutes');
 runRecursive();
 
-// if (!!options.periodic) {
-//   runRecursive();
-// }
-//
-// if (!options['no-listen']) {
-//   startListening();
-// }
-
-
 function runRecursive () {
-  log('Starting unpacking from', options.cwd);
+  console.log('Starting unpacking from', options.cwd);
   autoUnrar(options.cwd, function (err, data) {
     console.log(err, data);
   });
   setTimeout(runRecursive, minutesToMs(options.interval));
-}
-
-// function startListening () {
-//   log('Listening on rar-files from', options.cwd);
-//   autoUnrar.listen(options.cwd, function (err, data) {
-//     console.log(err, data);
-//   }, function () {
-//     log('Unpacking triggered from listening on', options.cwd);
-//   });
-// }
-
-function toList (arg) {
-  return [].slice.apply(arg);
-}
-
-function log () {
-  console.log.apply(console, [new Date().toISOString()].concat(toList(arguments)));
 }
 
 function minutesToMs (m) {

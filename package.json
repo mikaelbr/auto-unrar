@@ -15,7 +15,6 @@
   "dependencies": {
     "command-line-args": "^2.1.4",
     "glob": "^6.0.4",
-    "lodash.debounce": "^4.0.0",
     "unrar": "^0.1.3"
   }
 }

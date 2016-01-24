@@ -2,31 +2,11 @@ var Unrar = require('unrar');
 var glob = require('glob');
 var path = require('path');
 var fs = require('fs');
-// var globwatcher = require('globwatcher').globwatcher;
-var debounce = require('lodash.debounce');
 
 module.exports = function (cwd, cb) {
   var opts = { cwd: cwd || process.cwd() };
   return unpackAll(opts, cb);
 };
-
-// module.exports.listen = function (cwd, cb, onTrigger) {
-//   onTrigger = onTrigger || function () { };
-//   var opts = {
-//     cwd: cwd || process.cwd(),
-//     emitFolders: true
-//   };
-//
-//   var watcher = globwatcher('./', opts);
-//   watcher.on('added', function (filename) {
-//     onTrigger(filename);
-//     unpackAll(opts, cb);
-//   });
-//
-//   // watcher.on('deleted', function (filename) {
-//   //   console.log('deleted', filename);
-//   // });
-// };
 
 function unpackAll (opts, cb) {
   glob('./**/*.rar', opts, function (err, entries) {
