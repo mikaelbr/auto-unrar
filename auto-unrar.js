@@ -1,4 +1,4 @@
-var Unrar = require('unrar');
+var unrar = require('standalone-unrar');
 var glob = require('glob');
 var path = require('path');
 var fs = require('fs');
@@ -32,7 +32,7 @@ function unpackAll (opts, cb) {
 
 function unpack (fullPath, cb) {
   var base = path.dirname(fullPath);
-  var archive = new Unrar(normalisePath(fullPath));
+  var archive = unrar(normalisePath(fullPath));
 
   archive.list(function (err, entries) {
     if (err) return cb(err);
@@ -41,14 +41,19 @@ function unpack (fullPath, cb) {
 }
 
 function unrarIfNotExists (archive, base, cb, entry) {
-  var outputFile = path.join(base, entry.name);
+  var outputFile = path.join(base, entry);
   itemExists(outputFile, function (err, exists) {
     if (exists) return cb(null, { skip: true, entry: entry });
 
-    return cb(null, {
-      skip: false, entry: entry,
-      stream: archive.stream(entry.name).pipe(fs.createWriteStream(outputFile)),
-      outputFile: outputFile
+    archive.unpack({
+      'output-directory': base,
+      'files': [ entry ]
+    }, function (err) {
+      cb(null, {
+        skip: false,
+        entry: entry,
+        outputFile: outputFile
+      });
     });
   });
 }
