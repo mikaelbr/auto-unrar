@@ -87,14 +87,18 @@ function poll (options, cb) {
   var interval = options.interval;
   var beforeHook = options.beforeHook || function () { };
 
+  var timeout;
+
   recursiveAutoUnrar();
   function recursiveAutoUnrar () {
     beforeHook(options);
     autoUnrar(cwd, cb);
-    setTimeout(recursiveAutoUnrar, minutesToMs(interval));
+    timeout = setTimeout(recursiveAutoUnrar, minutesToMs(interval));
   }
 
-  return recursiveAutoUnrar;
+  return function unsubscribe () {
+    timeout && clearTimeout(timeout);
+  };
 }
 
 function unpackAll (opts, cb) {
