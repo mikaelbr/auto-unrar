@@ -1,6 +1,6 @@
 {
   "name": "auto-unrar",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Automatic unpack all recursive rar-files from a directory",
   "main": "auto-unrar.js",
   "bin": {
