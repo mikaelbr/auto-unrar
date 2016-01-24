@@ -1,4 +1,4 @@
-# [WIP] auto-unrar
+# auto-unrar [![NPM version][npm-image]][npm-url]
 
 ## Functions
 
@@ -93,3 +93,7 @@ autoUnrar.poll({
 
 });
 ```
+
+[npm-url]: https://npmjs.org/package/auto-unrar
+[npm-image]: http://img.shields.io/npm/v/auto-unrar.svg?style=flat
+[npm-downloads]: http://img.shields.io/npm/dm/auto-unrar.svg?style=flat
