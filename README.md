@@ -7,7 +7,7 @@
 <dd><p>Unrar all files recursively if they don&#39;t exits given by
 a entry point root directory.</p>
 </dd>
-<dt><a href="#poll">poll(options, callback)</a></dt>
+<dt><a href="#poll">poll(options, callback)</a> ⇒ <code>function</code></dt>
 <dd><p>Automatically poll defined by interval recursively from root
 defined as cwd from the options.</p>
 </dd>
@@ -56,11 +56,12 @@ Options
   Full help (project repo): https://github.com/mikaelbr/auto-unrar
 ```
 <a name="poll"></a>
-## poll(options, callback)
+## poll(options, callback) ⇒ <code>function</code>
 Automatically poll defined by interval recursively from root
 defined as cwd from the options.
 
 **Kind**: global function
+**Returns**: <code>function</code> - Function to stop polling for packages.
 
 | Param | Type | Description |
 | --- | --- | --- |

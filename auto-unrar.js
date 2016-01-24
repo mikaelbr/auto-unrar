@@ -81,6 +81,7 @@ module.exports.poll = poll;
  * @param {Number} options.interval - Polling interval in minutes
  * @param {Function} options.beforeHook - Hook before each unpacking search
  * @param {Function(err, data)} callback - Callback after all data has been unpacked
+ * @returns {Function} Function to stop polling for packages.
  **/
 function poll (options, cb) {
   var cwd = options.cwd;
