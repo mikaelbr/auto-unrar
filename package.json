@@ -1,0 +1,21 @@
+{
+  "name": "auto-unrar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "auto-unrar.js",
+  "bin": {
+    "auto-unrar": "bin/auto-unrar.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Mikael Brevik <mikaelbre@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "command-line-args": "^2.1.4",
+    "glob": "^6.0.4",
+    "lodash.debounce": "^4.0.0",
+    "unrar": "^0.1.3"
+  }
+}
