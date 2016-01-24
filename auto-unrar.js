@@ -47,6 +47,55 @@ function autoUnrar (cwd, cb) {
 }
 
 module.exports = autoUnrar;
+module.exports.poll = poll;
+
+/**
+ * Automatically poll defined by interval recursively from root
+ * defined as cwd from the options.
+ *
+ * @example
+ * ```js
+ * autoUnrar.poll('~/Documents/myDirectory', function (err, data) {
+ *   // data is an object with archives as keys and entries on data.
+ *   // example:
+ *   // {
+ *   //   'some-file.rar': {
+ *   //     skip: false,
+ *   //     outputFile: 'some/path/some-file.dat',
+ *   //     entry: 'some-file'
+ *   //   }
+ *   // }
+ * });
+ *
+ * autoUnrar.poll({
+ *   cwd: '~/Documents/myDirectory',
+ *   interval: 10, // every 10 mintues
+ *   beforeHook: function () { console.log('About to search for files') }
+ * }, function (err, data) {
+ *
+ * });
+ * ```
+ *
+ * @param {String|Object} - Path to search for rar-files or options object
+ * @param {String} options.cwd - Path to search for rar-files
+ * @param {Number} options.interval - Polling interval in minutes
+ * @param {Function} options.beforeHook - Hook before each unpacking search
+ * @param {Function(err, data)} callback - Callback after all data has been unpacked
+ **/
+function poll (options, cb) {
+  var cwd = options.cwd;
+  var interval = options.interval;
+  var beforeHook = options.beforeHook || function () { };
+
+  recursiveAutoUnrar();
+  function recursiveAutoUnrar () {
+    beforeHook(options);
+    autoUnrar(cwd, cb);
+    setTimeout(recursiveAutoUnrar, minutesToMs(interval));
+  }
+
+  return recursiveAutoUnrar;
+}
 
 function unpackAll (opts, cb) {
   glob('./**/*.rar', opts, function (err, entries) {
@@ -117,4 +166,8 @@ function uniquePerBasename (entries) {
 
 function normalisePath (path) {
   return path.replace(/ /g, '\\ ');
+}
+
+function minutesToMs (m) {
+  return m * 60 * 1000;
 }

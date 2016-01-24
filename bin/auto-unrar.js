@@ -30,31 +30,36 @@ if (options.help) {
 console.log('=>', chalk.blue('Started polling folder `' +
   chalk.underline(options.cwd) + '` every ' +
   chalk.green(options.interval) + ' minutes'));
-runRecursive();
 
-function runRecursive () {
-  console.log('=>', chalk.blue('Starting unpacking from'), chalk.blue.underline(options.cwd));
-  autoUnrar(options.cwd, function (err, data) {
-    Object.keys(data).forEach(function (archive) {
-      var entry = data[archive];
-      if (entry.skip) {
-        console.log(
-          chalk.yellow('Skipped archive `' +
-           chalk.underline(archive) + '`, as it\'s already unpacked')
-        );
-      } else {
-        console.log(
-          chalk.green('Extracted archive `' +
-            chalk.underline(archive) +
-            '` to: \n\t\t\t ≈>`' +
-            chalk.underline(entry.outputFile)+'`')
-        );
-      }
-    });
+var passedOptions = {
+  cwd: options.cwd,
+  interval: options.interval,
+  beforeHook: function () {
+    console.log('=>',
+      chalk.blue('Starting unpacking from'),
+      chalk.blue.underline(options.cwd));
+  }
+};
+autoUnrar.poll(passedOptions, formatOutput);
+
+function formatOutput (err, data) {
+  Object.keys(data).forEach(function (archive) {
+    printDependingOnSkip(archive, data[archive]);
   });
-  setTimeout(runRecursive, minutesToMs(options.interval));
 }
 
-function minutesToMs (m) {
-  return m * 60 * 1000;
+function printDependingOnSkip (archive, entry) {
+  if (entry.skip) {
+    return console.log(
+      chalk.yellow('Skipped archive `' +
+       chalk.underline(archive) + '`, as it\'s already unpacked')
+    );
+  }
+
+  console.log(
+    chalk.green('Extracted archive `' +
+      chalk.underline(archive) +
+      '` to: \n\t\t\t ≈>`' +
+      chalk.underline(entry.outputFile)+'`')
+  );
 }
