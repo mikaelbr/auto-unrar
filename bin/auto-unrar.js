@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var autoUnrar = require('../');
+var chalk = require('chalk');
 var commandLineArgs = require('command-line-args');
 
 var cli = commandLineArgs([
@@ -26,15 +27,30 @@ if (options.help) {
   process.exit(0);
 }
 
-console.log('Started polling folder `' +
-  options.cwd + '` every ' +
-  options.interval + ' minutes');
+console.log('=>', chalk.blue('Started polling folder `' +
+  chalk.underline(options.cwd) + '` every ' +
+  chalk.green(options.interval) + ' minutes'));
 runRecursive();
 
 function runRecursive () {
-  console.log('Starting unpacking from', options.cwd);
+  console.log('=>', chalk.blue('Starting unpacking from'), chalk.blue.underline(options.cwd));
   autoUnrar(options.cwd, function (err, data) {
-    console.log(err, data);
+    Object.keys(data).forEach(function (archive) {
+      var entry = data[archive];
+      if (entry.skip) {
+        console.log(
+          chalk.yellow('Skipped archive `' +
+           chalk.underline(archive) + '`, as it\'s already unpacked')
+        );
+      } else {
+        console.log(
+          chalk.green('Extracted archive `' +
+            chalk.underline(archive) +
+            '` to: \n\t\t\t ≈>`' +
+            chalk.underline(entry.outputFile)+'`')
+        );
+      }
+    });
   });
   setTimeout(runRecursive, minutesToMs(options.interval));
 }
